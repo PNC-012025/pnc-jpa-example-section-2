@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * EmployeeDAOImpl is the implementation of the EmployeeDAO interface.
+ * It uses JPA to interact with the database.
+ */
 @Repository
 public class EmployeeDAOImpl implements EmployeeDAO {
 

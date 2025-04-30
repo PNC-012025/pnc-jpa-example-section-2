@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * EmployeeServiceImpl is the implementation of the EmployeeService interface.
+ * It uses the EmployeeDAO to interact with the database.
+ */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 

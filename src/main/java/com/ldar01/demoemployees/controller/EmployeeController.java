@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/api")
+@RequestMapping("/api") //Don´t forget to add this annotation for the controller and redirection
 public class EmployeeController {
-
+    // This is the service that will be used to handle the business logic
     private final EmployeeService employeeService;
 
+    // Constructor injection is preferred over field injection
     @Autowired
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
+    // This is the endpoint that will be used to get all employees
     @GetMapping("/employee")
     public List<Employee> getEmployee() {
         return employeeService.findAll();
