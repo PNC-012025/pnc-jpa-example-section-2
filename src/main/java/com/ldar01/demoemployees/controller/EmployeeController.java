@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("/api/employee") //Don´t forget to add this annotation for the controller and redirection
 public class EmployeeController {
     // This is the service that will be used to handle the business logic
