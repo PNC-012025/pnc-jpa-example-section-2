@@ -38,6 +38,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee update(Employee employee) {
+        return employeeDAO.save(employee);
+    }
+
+    @Override
     public void delete(int id) {
         employeeDAO.delete(id);
     }
