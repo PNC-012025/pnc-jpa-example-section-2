@@ -1,8 +1,11 @@
 package com.ldar01.demoemployees.service.impl;
 
+import com.ldar01.demoemployees.dto.EmployeeCreateDTO;
+import com.ldar01.demoemployees.dto.EmployeeDTO;
 import com.ldar01.demoemployees.entities.Employee;
 import com.ldar01.demoemployees.repository.EmployeeRepository;
 import com.ldar01.demoemployees.service.EmployeeService;
+import com.ldar01.demoemployees.utils.mappers.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,23 +26,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> findAll() {
+        return EmployeeMapper.toDTOList(employeeRepository.findAll());
     }
 
     @Override
-    public Employee findById(int id) {
-        return employeeRepository.findById(id).get();
+    public EmployeeDTO findById(int id) {
+        return EmployeeMapper.toDTO(employeeRepository.findById(id).get());
     }
 
     @Override
-    public Employee save(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO save(EmployeeCreateDTO employee) {
+        return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntityCreate(employee)));
     }
 
     @Override
-    public Employee update(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO update(EmployeeDTO employee) {
+        return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntity(employee)));
     }
 
     @Override

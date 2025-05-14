@@ -1,5 +1,7 @@
 package com.ldar01.demoemployees.controller;
 
+import com.ldar01.demoemployees.dto.EmployeeCreateDTO;
+import com.ldar01.demoemployees.dto.EmployeeDTO;
 import com.ldar01.demoemployees.entities.Employee;
 import com.ldar01.demoemployees.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class EmployeeController {
     }
     // This is the endpoint that will be used to get all employees
     @GetMapping()
-    public List<Employee> getEmployee() {
+    public List<EmployeeDTO> getEmployee() {
         return employeeService.findAll();
     }
 /*
@@ -30,17 +32,17 @@ public class EmployeeController {
     }
 */
     @GetMapping("/{id}")
-    public Employee getEmployeeById2(@PathVariable int id) {
+    public EmployeeDTO getEmployeeById2(@PathVariable int id) {
         return employeeService.findById(id);
     }
 
     @PostMapping("/save")
-    public Employee saveEmployee(@RequestBody Employee employee) {
+    public EmployeeDTO saveEmployee(@RequestBody EmployeeCreateDTO employee) {
         return employeeService.save(employee);
     }
 
     @PutMapping("/update")
-    public Employee updateEmployee(@RequestBody Employee employee) {
+    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employee) {
         return employeeService.update(employee);
     }
 

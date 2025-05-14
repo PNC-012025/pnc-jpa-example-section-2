@@ -12,6 +12,9 @@ import lombok.*;
 //@Getter
 //@Setter
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
     @Id
     @Column(name = "id")
