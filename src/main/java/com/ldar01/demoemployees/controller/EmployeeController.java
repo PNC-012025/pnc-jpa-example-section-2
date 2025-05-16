@@ -1,10 +1,12 @@
 package com.ldar01.demoemployees.controller;
 
-import com.ldar01.demoemployees.dto.EmployeeCreateDTO;
-import com.ldar01.demoemployees.dto.EmployeeDTO;
-import com.ldar01.demoemployees.entities.Employee;
+import com.ldar01.demoemployees.dto.request.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.EmployeeResponse;
 import com.ldar01.demoemployees.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,37 +24,40 @@ public class EmployeeController {
     }
     // This is the endpoint that will be used to get all employees
     @GetMapping()
-    public List<EmployeeDTO> getEmployee() {
-        return employeeService.findAll();
+    public ResponseEntity<List<EmployeeResponse>> getEmployee() {
+        List<EmployeeResponse> employees = employeeService.findAll();
+
+        if (employees.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(employees);
     }
-/*
-    @GetMapping()
-    public Employee getEmployeeById(@RequestParam int id) {
-        return employeeService.findById(id);
-    }
-*/
+
     @GetMapping("/{id}")
-    public EmployeeDTO getEmployeeById2(@PathVariable int id) {
-        return employeeService.findById(id);
+    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable int id) {
+        EmployeeResponse employee = employeeService.findById(id);
+        return ResponseEntity.ok(employee);
     }
 
-    @PostMapping("/save")
-    public EmployeeDTO saveEmployee(@RequestBody EmployeeCreateDTO employee) {
-        return employeeService.save(employee);
+    @PostMapping("/")
+    public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody @Valid EmployeeRequest employee) {
+        if (employee == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(employeeService.save(employee));
     }
 
-    @PutMapping("/update")
-    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employee) {
-        return employeeService.update(employee);
+    @PutMapping("/")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@RequestBody EmployeeUpdateRequest employee) {
+        EmployeeResponse updatedEmployee = employeeService.findById(employee.getEmployeeId());
+        if (updatedEmployee == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedEmployee);
     }
 
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable int id) {
         employeeService.delete(id);
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "Test ;v";
     }
 }

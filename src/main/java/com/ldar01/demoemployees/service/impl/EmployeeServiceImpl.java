@@ -1,8 +1,8 @@
 package com.ldar01.demoemployees.service.impl;
 
-import com.ldar01.demoemployees.dto.EmployeeCreateDTO;
-import com.ldar01.demoemployees.dto.EmployeeDTO;
-import com.ldar01.demoemployees.entities.Employee;
+import com.ldar01.demoemployees.dto.request.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.EmployeeResponse;
 import com.ldar01.demoemployees.repository.EmployeeRepository;
 import com.ldar01.demoemployees.service.EmployeeService;
 import com.ldar01.demoemployees.utils.mappers.EmployeeMapper;
@@ -26,22 +26,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> findAll() {
+    public List<EmployeeResponse> findAll() {
         return EmployeeMapper.toDTOList(employeeRepository.findAll());
     }
 
     @Override
-    public EmployeeDTO findById(int id) {
+    public EmployeeResponse findById(int id) {
         return EmployeeMapper.toDTO(employeeRepository.findById(id).get());
     }
 
     @Override
-    public EmployeeDTO save(EmployeeCreateDTO employee) {
+    public EmployeeResponse save(EmployeeRequest employee) {
         return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntityCreate(employee)));
     }
 
     @Override
-    public EmployeeDTO update(EmployeeDTO employee) {
+    public EmployeeResponse update(EmployeeUpdateRequest employee) {
         return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntity(employee)));
     }
 

@@ -1,8 +1,8 @@
 package com.ldar01.demoemployees.service;
 
-import com.ldar01.demoemployees.dto.EmployeeCreateDTO;
-import com.ldar01.demoemployees.dto.EmployeeDTO;
-import com.ldar01.demoemployees.entities.Employee;
+import com.ldar01.demoemployees.dto.request.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.EmployeeResponse;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
  * It defines the methods to interact with the Employee data.
  */
 public interface EmployeeService {
-    List<EmployeeDTO> findAll();
-    EmployeeDTO findById(int id);
-    EmployeeDTO save(EmployeeCreateDTO employee);
-    EmployeeDTO update(EmployeeDTO employee);
+    List<EmployeeResponse> findAll();
+    EmployeeResponse findById(int id);
+    EmployeeResponse save(EmployeeRequest employee);
+    EmployeeResponse update(EmployeeUpdateRequest employee);
     void delete(int id);
 }
