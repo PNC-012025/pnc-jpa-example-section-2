@@ -3,9 +3,12 @@ package com.ldar01.demoemployees.controller;
 import com.ldar01.demoemployees.dto.request.EmployeeRequest;
 import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
 import com.ldar01.demoemployees.dto.response.EmployeeResponse;
+import com.ldar01.demoemployees.exception.ApiError;
+import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
 import com.ldar01.demoemployees.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +31,7 @@ public class EmployeeController {
         List<EmployeeResponse> employees = employeeService.findAll();
 
         if (employees.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            throw new EmployeeNotFoundException("Employees not found or empty list");
         }
         return ResponseEntity.ok(employees);
     }
@@ -36,6 +39,9 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable int id) {
         EmployeeResponse employee = employeeService.findById(id);
+        if (employee == null) {
+            throw new EmployeeNotFoundException("Employee not found");
+        }
         return ResponseEntity.ok(employee);
     }
 
@@ -51,7 +57,7 @@ public class EmployeeController {
     public ResponseEntity<EmployeeResponse> updateEmployee(@RequestBody EmployeeUpdateRequest employee) {
         EmployeeResponse updatedEmployee = employeeService.findById(employee.getEmployeeId());
         if (updatedEmployee == null) {
-            return ResponseEntity.notFound().build();
+            throw new EmployeeNotFoundException("Employee not found");
         }
         return ResponseEntity.ok(updatedEmployee);
     }
