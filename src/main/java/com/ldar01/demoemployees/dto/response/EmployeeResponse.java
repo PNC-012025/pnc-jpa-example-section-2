@@ -1,5 +1,6 @@
 package com.ldar01.demoemployees.dto.response;
 
+import com.ldar01.demoemployees.entities.Department;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,4 +11,5 @@ public class EmployeeResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private Department department;
 }
