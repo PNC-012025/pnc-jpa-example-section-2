@@ -1,6 +1,7 @@
 package com.ldar01.demoemployees.utils.mappers;
 
 import com.ldar01.demoemployees.dto.request.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
 import com.ldar01.demoemployees.dto.response.EmployeeResponse;
 import com.ldar01.demoemployees.entities.Employee;
 
@@ -18,6 +19,15 @@ public class EmployeeMapper {
 
     public static Employee toEntityCreate(EmployeeRequest employeeDTO) {
         return Employee.builder()
+                .name(employeeDTO.getFirstName())
+                .lastName(employeeDTO.getLastName())
+                .email(employeeDTO.getEmail())
+                .build();
+    }
+
+    public static Employee toEntityUpdate(EmployeeUpdateRequest employeeDTO) {
+        return Employee.builder()
+                .id(employeeDTO.getEmployeeId())
                 .name(employeeDTO.getFirstName())
                 .lastName(employeeDTO.getLastName())
                 .email(employeeDTO.getEmail())
