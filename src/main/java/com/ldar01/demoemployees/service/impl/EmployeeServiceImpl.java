@@ -3,6 +3,7 @@ package com.ldar01.demoemployees.service.impl;
 import com.ldar01.demoemployees.dto.request.EmployeeRequest;
 import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
 import com.ldar01.demoemployees.dto.response.EmployeeResponse;
+import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
 import com.ldar01.demoemployees.repository.EmployeeRepository;
 import com.ldar01.demoemployees.service.EmployeeService;
 import com.ldar01.demoemployees.utils.mappers.EmployeeMapper;
@@ -32,7 +33,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeResponse findById(int id) {
-        return EmployeeMapper.toDTO(employeeRepository.findById(id).get());
+        return EmployeeMapper.toDTO(employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found")));
     }
 
     @Override

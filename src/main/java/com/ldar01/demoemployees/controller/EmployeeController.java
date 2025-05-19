@@ -1,9 +1,9 @@
 package com.ldar01.demoemployees.controller;
 
+import com.ldar01.demoemployees.dto.response.GeneralResponse;
 import com.ldar01.demoemployees.dto.request.EmployeeRequest;
 import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
 import com.ldar01.demoemployees.dto.response.EmployeeResponse;
-import com.ldar01.demoemployees.exception.ApiError;
 import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
 import com.ldar01.demoemployees.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,45 +26,51 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
+
     // This is the endpoint that will be used to get all employees
     @GetMapping()
-    public ResponseEntity<List<EmployeeResponse>> getEmployee() {
+    public ResponseEntity<GeneralResponse> getEmployees() {
         List<EmployeeResponse> employees = employeeService.findAll();
 
         if (employees.isEmpty()) {
-            throw new EmployeeNotFoundException("Employees not found or empty list");
+            throw new EmployeeNotFoundException("Employees were not found");
         }
-        return ResponseEntity.ok(employees);
+        return buildResponse("Employees found", HttpStatus.OK, employees);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable int id) {
+    public ResponseEntity<GeneralResponse> getEmployeeById(@PathVariable int id) {
         EmployeeResponse employee = employeeService.findById(id);
-        if (employee == null) {
-            throw new EmployeeNotFoundException("Employee not found");
-        }
-        return ResponseEntity.ok(employee);
+        return buildResponse("Employee found", HttpStatus.OK, employee);
     }
 
     @PostMapping("/")
-    public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody @Valid EmployeeRequest employee) {
-        if (employee == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(employeeService.save(employee));
+    public ResponseEntity<GeneralResponse> saveEmployee(@RequestBody @Valid EmployeeRequest employee) {
+
+        return buildResponse("Employee created", HttpStatus.CREATED, employeeService.save(employee));
     }
 
     @PutMapping("/")
-    public ResponseEntity<EmployeeResponse> updateEmployee(@RequestBody EmployeeUpdateRequest employee) {
-        EmployeeResponse updatedEmployee = employeeService.findById(employee.getEmployeeId());
-        if (updatedEmployee == null) {
-            throw new EmployeeNotFoundException("Employee not found");
-        }
-        return ResponseEntity.ok(updatedEmployee);
+    public ResponseEntity<GeneralResponse> updateEmployee(@RequestBody @Valid EmployeeUpdateRequest employee) {
+        employeeService.findById(employee.getEmployeeId());
+        return buildResponse("Employee updated", HttpStatus.OK, employeeService.update(employee));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable int id) {
+    public ResponseEntity<GeneralResponse> deleteEmployee(@PathVariable int id) {
+        EmployeeResponse employee = employeeService.findById(id);
         employeeService.delete(id);
+        return buildResponse("Employee deleted", HttpStatus.OK, employee);
+    }
+
+    public ResponseEntity<GeneralResponse> buildResponse(String message, HttpStatus status, Object data) {
+        String uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPath();
+        return ResponseEntity.status(status).body(GeneralResponse.builder()
+                .message(message)
+                .status(status.value())
+                .data(data)
+                .uri(uri)
+                .time(LocalDate.now())
+                .build());
     }
 }

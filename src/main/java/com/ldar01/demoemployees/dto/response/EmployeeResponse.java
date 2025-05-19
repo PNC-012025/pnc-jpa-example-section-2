@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class EmployeeResponse {
-    private int employeeId;
+    private Integer employeeId;
     private String firstName;
     private String lastName;
     private String email;

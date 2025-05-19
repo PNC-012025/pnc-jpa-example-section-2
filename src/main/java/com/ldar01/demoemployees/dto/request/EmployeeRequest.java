@@ -8,10 +8,12 @@ import lombok.Data;
 @Data
 @Builder
 public class EmployeeRequest {
-    @NotNull
+    @NotNull(message = "First name cannot be null")
     private String firstName;
-    @NotNull
+
+    @NotNull(message = "Last name cannot be null")
     private String lastName;
+
     @NotNull(message = "Email cannot be null")
     @Email(message = "Email should be valid with @")
     private String email;
