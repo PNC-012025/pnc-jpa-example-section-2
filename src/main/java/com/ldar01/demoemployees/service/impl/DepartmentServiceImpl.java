@@ -7,6 +7,7 @@ import com.ldar01.demoemployees.exception.DepartmentNotFoundException;
 import com.ldar01.demoemployees.repository.DepartmentRepository;
 import com.ldar01.demoemployees.service.DepartmentService;
 import com.ldar01.demoemployees.utils.mappers.DepartmentMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +35,20 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public boolean doesDepartmentExist(String name) {
-        return departmentRepository.existsDepartmentByDepartmentName(name.toUpperCase());
+    public DepartmentResponse findByName(String name) {
+        return DepartmentMapper.toDTO(departmentRepository.findByDepartmentName(name.toUpperCase())
+                .orElseThrow(() -> new DepartmentNotFoundException("Department not found")));
     }
 
     @Override
+    @Transactional
     public DepartmentResponse save(DepartmentRequest department) {
         department.setDepartmentName(department.getDepartmentName().toUpperCase());
         return DepartmentMapper.toDTO(departmentRepository.save(DepartmentMapper.toEntityCreate(department)));
     }
 
     @Override
+    @Transactional
     public DepartmentResponse update(DepartmentUpdateRequest department) {
         department.setDepartmentName(department.getDepartmentName().toUpperCase());
         return DepartmentMapper.toDTO(departmentRepository.save(DepartmentMapper.toEntityUpdate(department)));

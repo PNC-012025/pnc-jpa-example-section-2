@@ -12,7 +12,7 @@ import java.util.List;
 public interface DepartmentService {
     List<DepartmentResponse> findAll();
     DepartmentResponse findById(int id);
-    boolean doesDepartmentExist(String name);
+    DepartmentResponse findByName(String name);
     DepartmentResponse save(DepartmentRequest employee);
     DepartmentResponse update(DepartmentUpdateRequest employee);
     void delete(int id);
