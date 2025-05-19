@@ -1,4 +1,4 @@
-package com.ldar01.demoemployees.dto.request;
+package com.ldar01.demoemployees.dto.request.employee;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package com.ldar01.demoemployees.service.impl;
 
-import com.ldar01.demoemployees.dto.request.EmployeeRequest;
-import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
-import com.ldar01.demoemployees.dto.response.EmployeeResponse;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.employee.EmployeeResponse;
 import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
 import com.ldar01.demoemployees.repository.EmployeeRepository;
 import com.ldar01.demoemployees.service.EmployeeService;

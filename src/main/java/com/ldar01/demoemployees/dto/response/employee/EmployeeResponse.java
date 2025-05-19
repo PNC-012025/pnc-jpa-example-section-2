@@ -1,4 +1,4 @@
-package com.ldar01.demoemployees.dto.response;
+package com.ldar01.demoemployees.dto.response.employee;
 
 import com.ldar01.demoemployees.entities.Department;
 import lombok.Builder;

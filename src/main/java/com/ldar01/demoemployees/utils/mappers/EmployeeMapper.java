@@ -1,8 +1,8 @@
 package com.ldar01.demoemployees.utils.mappers;
 
-import com.ldar01.demoemployees.dto.request.EmployeeRequest;
-import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
-import com.ldar01.demoemployees.dto.response.EmployeeResponse;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.employee.EmployeeResponse;
 import com.ldar01.demoemployees.entities.Employee;
 
 import java.util.List;

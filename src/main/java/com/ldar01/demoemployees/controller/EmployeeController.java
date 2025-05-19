@@ -1,9 +1,9 @@
 package com.ldar01.demoemployees.controller;
 
 import com.ldar01.demoemployees.dto.response.GeneralResponse;
-import com.ldar01.demoemployees.dto.request.EmployeeRequest;
-import com.ldar01.demoemployees.dto.request.EmployeeUpdateRequest;
-import com.ldar01.demoemployees.dto.response.EmployeeResponse;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.employee.EmployeeResponse;
 import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
 import com.ldar01.demoemployees.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -44,13 +44,13 @@ public class EmployeeController {
         return buildResponse("Employee found", HttpStatus.OK, employee);
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<GeneralResponse> saveEmployee(@RequestBody @Valid EmployeeRequest employee) {
 
         return buildResponse("Employee created", HttpStatus.CREATED, employeeService.save(employee));
     }
 
-    @PutMapping("/")
+    @PutMapping()
     public ResponseEntity<GeneralResponse> updateEmployee(@RequestBody @Valid EmployeeUpdateRequest employee) {
         employeeService.findById(employee.getEmployeeId());
         return buildResponse("Employee updated", HttpStatus.OK, employeeService.update(employee));
