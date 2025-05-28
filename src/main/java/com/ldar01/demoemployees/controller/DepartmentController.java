@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +29,7 @@ public class DepartmentController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GeneralResponse> getAllDepartments() {
         List<DepartmentResponse> departments = departmentService.findAll();
 
@@ -38,24 +40,28 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<GeneralResponse> getDepartmentById(@PathVariable int id) {
         DepartmentResponse department = departmentService.findById(id);
         return buildResponse("Department found", HttpStatus.OK, department);
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GeneralResponse> saveDepartment(@RequestBody @Valid DepartmentRequest department) {
 
         return buildResponse("Department created", HttpStatus.CREATED, departmentService.save(department));
     }
 
     @PutMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GeneralResponse> updateDepartment(@RequestBody @Valid DepartmentUpdateRequest department) {
         departmentService.findById(department.getDepartmentId());
         return buildResponse("Department updated", HttpStatus.OK, departmentService.update(department));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GeneralResponse> deletDepartment(@PathVariable int id) {
         DepartmentResponse department = departmentService.findById(id);
         departmentService.delete(id);
