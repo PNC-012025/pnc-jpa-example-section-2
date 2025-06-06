@@ -1,5 +1,8 @@
 package com.ldar01.demoemployees.configuration;
 
+import com.ldar01.demoemployees.security.JwtAuth;
+import com.ldar01.demoemployees.security.JwtAuthFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,10 +18,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfiguration {
+
+    private JwtAuthFilter jwtAuthFilter;
+    private JwtAuth jwtAuth;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,9 +38,16 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET, "/api/employee/**").hasRole("USER")*/
+                            .requestMatchers("/api/auth/**").permitAll()
                             .anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults() );
-                return http.build();
+
+
+                http.exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(jwtAuth));
+
+                http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
     /*
     @Bean
