@@ -13,52 +13,56 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * This class is for Validate the token and build the authentication object.
+ */
 @Component
 public class JwtTokenProvider {
     @Value("${app.jwt-secret}")
-    private String secret;
+    private String secret; // Secret key used for signing the JWT
+
     @Value("${app.jwt-expiration-time}")
-    private String expirationTime;
+    private String expirationTime; // Expiration time for the JWT in milliseconds
 
+    // Generates a JWT token for the authenticated user
     public String generateToken(Authentication auth) {
-        String username = auth.getName();
-        Date now = new Date();
-        Date expirationDate = new Date(now.getTime() + Long.parseLong(expirationTime));
-
+        String username = auth.getName(); // Retrieve the username from the authentication object
+        Date now = new Date(); // Current date and time
+        Date expirationDate = new Date(now.getTime() + Long.parseLong(expirationTime)); // Calculate the expiration date
+        // Build and sign the JWT token
         String token = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expirationDate)
-                .signWith(getKey())
+                .setSubject(username) // Set the username as the subject
+                .setIssuedAt(now) // Set the issue date
+                .setExpiration(expirationDate) // Set the expiration date
+                .signWith(getKey()) // Sign the token with the secret key
                 .compact();
-
-        return token;
-
+        return token; // Return the generated token
     }
 
+    // Retrieves the secret key for signing and validating the JWT
     private Key getKey() {
         return Keys.hmacShaKeyFor(
-                Decoders.BASE64.decode(secret)
+                Decoders.BASE64.decode(secret) // Decode the secret key from Base64
         );
     }
 
-    //Obtain user from token
+    // Extracts the username from the provided JWT token
     public String getUsernameFromToken(String token) {
-        String username = Jwts.parser()
-                .setSigningKey(getKey())
+        String username = Jwts.parser() // Parse the JWT token
+                .setSigningKey(getKey()) // Use the secret key for validation
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(token) // Parse the claims from the token
                 .getBody()
-                .getSubject();
-        return username;
+                .getSubject(); // Retrieve the subject (username) from the claims
+        return username; // Return the extracted username
     }
 
-    //Validate our token
+    // Validates the provided JWT token
     public boolean validateToken(String token) {
-        Jwts.parser()
-                .setSigningKey(getKey())
+        Jwts.parser() // Parse the JWT token
+                .setSigningKey(getKey()) // Use the secret key for validation
                 .build()
-                .parse(token);
-        return true;
+                .parse(token); // Validate the token structure and signature
+        return true; // Return true if the token is valid
     }
 }

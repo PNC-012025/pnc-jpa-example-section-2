@@ -19,18 +19,21 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository; // Repository to access employee data
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        // Fetches an employee by username or email, throws an exception if not found
         Employee employee = employeeRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException(usernameOrEmail));
 
+        // Maps the employee's roles to granted authorities
         Set<GrantedAuthority> grantedAuthorities = employee.getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName())) // Converts each role to a granted authority
                 .collect(Collectors.toSet());
 
+        // Returns a Spring Security User object with the employee's username, password, and authorities
         return new User(employee.getUsername(), employee.getPassword(), grantedAuthorities);
     }
 }

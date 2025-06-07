@@ -30,7 +30,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf((csrf)-> csrf.disable() )
+        http.csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorizeRequests) -> {
                     authorizeRequests
                             /*.requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN")
@@ -38,34 +38,34 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET, "/api/employee/**").hasRole("USER")*/
-                            .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/api/auth/**").permitAll() //Permits urls to be public, no authorization needed
                             .anyRequest().authenticated();
-                }).httpBasic(Customizer.withDefaults() );
+                }).httpBasic(Customizer.withDefaults());
 
 
-                http.exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(jwtAuth));
+        http.exceptionHandling(exception ->
+                exception.authenticationEntryPoint(jwtAuth));
 
-                http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    /*
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
+        /*
+        @Bean
+        public UserDetailsService userDetailsService() {
+            UserDetails admin = User.builder()
+                    .username("admin")
+                    .password(passwordEncoder().encode("admin"))
+                    .roles("ADMIN")
+                    .build();
 
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("test"))
-                .roles("USER")
-                .build();
+            UserDetails user = User.builder()
+                    .username("user")
+                    .password(passwordEncoder().encode("test"))
+                    .roles("USER")
+                    .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
-    }*/
+            return new InMemoryUserDetailsManager(admin, user);
+        }*/
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

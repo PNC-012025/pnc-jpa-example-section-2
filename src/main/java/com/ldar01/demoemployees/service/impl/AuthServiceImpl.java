@@ -19,16 +19,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(LoginRequest loginRequest) {
+        // Authenticates the user using the provided username and password
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
+                        loginRequest.getUsername(), // User's username
+                        loginRequest.getPassword()  // User's password
                 )
         );
 
+        // Sets the authentication in Spring Security's context
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generates a JWT token for the authenticated user
         String token = jwtTokenProvider.generateToken(authentication);
 
+        // Returns the generated token
         return token;
     }
 }

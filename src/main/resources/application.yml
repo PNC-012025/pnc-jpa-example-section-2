@@ -13,5 +13,6 @@ spring:
       ddl-auto: update
 
 app:
+  #Important note: the JWT secret must be a valid Base64 string and sufficiently long (minimum 32 bytes for HS256). For example
   jwt-secret: 5e6e0cf10a57c6b4e5b5a0e5ecb415bca702d9173e0fe90f2d9d6096b813d054
   jwt-expiration-time: 3600000
