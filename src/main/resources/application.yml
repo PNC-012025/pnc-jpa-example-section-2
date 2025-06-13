@@ -3,16 +3,19 @@ spring:
     name: demoEmployees
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/employees_management
-    username: postgres
-    password: root
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/employees_management}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:root}
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 app:
   #Important note: the JWT secret must be a valid Base64 string and sufficiently long (minimum 32 bytes for HS256). For example
-  jwt-secret: 5e6e0cf10a57c6b4e5b5a0e5ecb415bca702d9173e0fe90f2d9d6096b813d054
-  jwt-expiration-time: 3600000
+  jwt-secret: ${JWT_SECRET:5e6e0cf10a57c6b4e5b5a0e5ecb415bca702d9173e0fe90f2d9d6096b813d054} # Example Base64 encoded secret
+  jwt-expiration-time: ${JWT_EXPIRATION_TIME:3600000} # 1 hour in milliseconds
