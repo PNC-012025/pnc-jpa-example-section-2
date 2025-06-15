@@ -10,6 +10,9 @@ services:
       POSTGRES_PASSWORD: root
     networks:
       - demo-employees-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   app:
     build:
       context: .
@@ -27,7 +30,12 @@ services:
       DATABASE_PASSWORD: root
       JWT_SECRET: 5e6e0cf10a57c6b4e5b5a0e5ecb415bca702d9173e0fe90f2d9d6096b813d054
       JWT_EXPIRATION_TIME: 3600000
+    volumes:
+      - ./logs:/app/logs
 
 networks:
     demo-employees-network:
       name: demo-employees-network
+
+volumes:
+    postgres_data:
