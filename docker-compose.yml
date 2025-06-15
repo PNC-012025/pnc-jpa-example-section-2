@@ -1,9 +1,9 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:17
     container_name: demo-employees-db
     ports:
-      - "5433:5432"
+      - "5434:5432"
     environment:
       POSTGRES_DB: employees_management
       POSTGRES_USER: postgres
