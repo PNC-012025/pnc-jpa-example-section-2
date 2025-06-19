@@ -1,0 +1,28 @@
+name: Java CI with Maven
+on:
+  push:                    # Cuando alguien hace push...
+    branches:
+      - master # ...a la rama 'master'
+      - spring-ci-cd-deploy 
+  pull_request:            # O cuando hay un Pull Request hacia 'main'
+    branches: [ master ]
+
+jobs:                      # Definición de los trabajos (jobs) a realizar
+  build:                   # Nombre del job
+    runs-on: ubuntu-latest # Tipo de máquina virtual que se usará (Linux actualizado)
+
+    steps:                 # Pasos que seguirá el job
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        # Esto clona el repositorio (es necesario para trabajar con tu código)
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+        # Configura Java 21 para compilar y ejecutar el proyecto
+
+      - name: Build with Maven
+        run: mvn clean install
+        # Ejecuta el comando para compilar y empaquetar el proyecto
