@@ -41,6 +41,7 @@ jobs:
     # Job para redeploy en Railway
   re-deploy-railway:
     runs-on: ubuntu-latest
+    needs: docker
     steps:
       - name: Redeploy Railway
         run: |
