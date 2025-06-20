@@ -26,3 +26,7 @@ jobs:                      # Definición de los trabajos (jobs) a realizar
       - name: Build with Maven
         run: mvn clean install
         # Ejecuta el comando para compilar y empaquetar el proyecto
+
+      - name: Run Tests
+        run: mvn test
+        # Ejecuta los tests del proyecto
