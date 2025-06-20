@@ -17,6 +17,6 @@ public class EmployeeTest {
         employee.setLastName("Doe");
         employee.setEmail("luisa@gmail.com");
 
-        assertNotNull(employee.getRoles());
+        assertNotNull(employee.getId());
     }
 }
