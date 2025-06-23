@@ -1,8 +1,19 @@
 package com.ldar01.demoemployees.service.impl;
 
-import com.ldar01.demoemployees.dao.EmployeeDAO;
-import com.ldar01.demoemployees.entities.Employee;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeRequest;
+import com.ldar01.demoemployees.dto.request.employee.EmployeeUpdateRequest;
+import com.ldar01.demoemployees.dto.response.department.DepartmentResponse;
+import com.ldar01.demoemployees.dto.response.employee.EmployeeResponse;
+import com.ldar01.demoemployees.entities.Department;
+import com.ldar01.demoemployees.exception.DepartmentNotFoundException;
+import com.ldar01.demoemployees.exception.EmployeeNotFoundException;
+import com.ldar01.demoemployees.repository.DepartmentRepository;
+import com.ldar01.demoemployees.repository.EmployeeRepository;
+import com.ldar01.demoemployees.service.DepartmentService;
 import com.ldar01.demoemployees.service.EmployeeService;
+import com.ldar01.demoemployees.utils.mappers.DepartmentMapper;
+import com.ldar01.demoemployees.utils.mappers.EmployeeMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,35 +26,42 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentService departmentService;
+
     @Autowired
-    private EmployeeDAO employeeDAO;
-
-    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
-        this.employeeDAO = employeeDAO;
+    public EmployeeServiceImpl(EmployeeRepository repository, DepartmentService departmentService) {
+        this.employeeRepository = repository;
+        this.departmentService = departmentService;
     }
 
     @Override
-    public List<Employee> findAll() {
-        return employeeDAO.findAll();
+    public List<EmployeeResponse> findAll() {
+        return EmployeeMapper.toDTOList(employeeRepository.findAll());
     }
 
     @Override
-    public Employee findById(int id) {
-        return employeeDAO.findById(id);
+    public EmployeeResponse findById(int id) {
+        return EmployeeMapper.toDTO(employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found")));
     }
 
     @Override
-    public Employee save(Employee employee) {
-        return employeeDAO.save(employee);
+    @Transactional
+    public EmployeeResponse save(EmployeeRequest employee) {
+        DepartmentResponse department = departmentService.findByName(employee.getDepartment());
+        return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntityCreate(employee, DepartmentMapper.toEntity(department))));
     }
 
     @Override
-    public Employee update(Employee employee) {
-        return employeeDAO.save(employee);
+    @Transactional
+    public EmployeeResponse update(EmployeeUpdateRequest employee) {
+        DepartmentResponse department = departmentService.findByName(employee.getDepartment());
+        return EmployeeMapper.toDTO(employeeRepository.save(EmployeeMapper.toEntityUpdate(employee, DepartmentMapper.toEntity(department))));
     }
 
     @Override
     public void delete(int id) {
-        employeeDAO.delete(id);
+        employeeRepository.deleteById(id);
     }
 }

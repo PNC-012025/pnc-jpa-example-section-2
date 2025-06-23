@@ -2,7 +2,5 @@ spring:
   application:
     name: demoEmployees
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/employees_management
-    username: postgres
-    password: root
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local} # Default profile is 'local', can be overridden by environment variable

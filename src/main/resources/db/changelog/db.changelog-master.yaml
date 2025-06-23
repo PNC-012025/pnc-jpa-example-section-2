@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: luisa
+      changes:
+        - sqlFile:
+            path: sql/001-init-values.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 002
+      author: luisa
+      changes:
+        - sqlFile:
+            path: sql/002-insert-data-to-tables.sql
+            relativeToChangelogFile: true

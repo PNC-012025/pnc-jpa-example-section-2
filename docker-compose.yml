@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:17
+    container_name: demo-employees-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: employees_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    networks:
+      - demo-employees-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: demo-employees-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - demo-employees-network
+    environment:
+      DATABASE_URL:  jdbc:postgresql://db:5432/employees_management
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: root
+      JWT_SECRET: 5e6e0cf10a57c6b4e5b5a0e5ecb415bca702d9173e0fe90f2d9d6096b813d054
+      JWT_EXPIRATION_TIME: 3600000
+    volumes:
+      - ./logs:/app/logs
+
+networks:
+    demo-employees-network:
+      name: demo-employees-network
+
+volumes:
+    postgres_data:
